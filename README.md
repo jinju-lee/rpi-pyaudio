@@ -1,4 +1,4 @@
-# * rpi-pyaudio 
+# *  rpi-pyaudio 
 Implement raspberry pi recorder and player in Python3
 
 ## 1. Install PyAudio module
