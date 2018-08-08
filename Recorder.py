@@ -44,15 +44,12 @@ def record_start():
 
     while GPIO.input(_GPIO_BUTTON) == 0:
         leds.update(Leds.rgb_on(MAGENTA))
+        time.sleep(0.02)
         data = stream.read(CHUNK)
         frames.append(data)
 
         # record stream
         if GPIO.input(_GPIO_BUTTON) == 1:
-            t_end = time.time() + RECORD_SECONDS
-            while time.time() < t_end:
-                data = stream.read(CHUNK)
-                frames.append(data)
             leds.update(Leds.rgb_off())
             break
 
