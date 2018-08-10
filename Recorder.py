@@ -2,13 +2,13 @@ import pyaudio
 import wave
 import time
 import aiy.voicehat
+import aiy.audio
 from aiy.vision.leds import Leds
 from datetime import datetime
 from pytz import timezone
 import RPi.GPIO as GPIO
 import soundfile as sf
 from subprocess import call
-#from pydub import AudioSegment
 
 #GPIO setting
 GPIO.setmode(GPIO.BCM)
@@ -25,7 +25,7 @@ leds = Leds()
 def record_start():
     # File name setting
     now = datetime.now(timezone('Asia/Seoul'))
-    y = now.strftime('%Y%m%d_%H%M%S')
+    y = now.strftime('%Y-%m-%d_%H-%M-%S')
     filename = y + '.wav';
 
     #Wav header setting
@@ -59,6 +59,7 @@ def record_start():
     stream.close()
     # close PyAudio
     p.terminate()
+    aiy.audio.say('Thank you')
 
     #Save recording and close
     wo = wave.open(WAVE_OUTPUT_FILENAME, 'wb')
@@ -73,14 +74,10 @@ def record_start():
     file_len = len(f) / f.samplerate
     print(file_len)
     if file_len < 1:
-        print("Recording is stoped.")
+        print("Recording is stopped.")
         call(["rm", filename])
         main()
-    '''
-    song = AudioSegment.from_wav(filename)
-    new_file = song[:(file_len-0.002)]
-    new_file.export(filename, format="wav")
-    '''
+
     print("Recording is finished.")
     leds.update(Leds.rgb_off())
     print(WAVE_OUTPUT_FILENAME)
@@ -93,5 +90,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-
